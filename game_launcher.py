@@ -2,16 +2,19 @@
 from itertools import combinations
 
 
+VICTORY_SUM = (6, 12, 15, 18, 24)   # is used to check for victory condition
+
+
 def introduction():
     return \
-        """                 Welcome to Tic-Tac-Toe! 
+        """             Welcome to Tic-Tac-Toe! 
 
-    This simple game is for two players, X and O, who take 
-    turns marking the spaces in a 3×3 grid. The player who 
-    succeeds in placing three of their marks in a diagonal, 
-    horizontal, or vertical row is the WINNER.
+This simple game is for two players, X and O, who take 
+turns marking the spaces in a 3×3 grid. The player who 
+succeeds in placing three of their marks in a diagonal, 
+horizontal, or vertical row is the WINNER.
 
-    More info - on https://en.wikipedia.org/wiki/Tic-tac-toe
+More info - on https://en.wikipedia.org/wiki/Tic-tac-toe
     """
 
 
@@ -123,10 +126,13 @@ class GameController:
         """
         Per player, create unique combinations out of all marked cells
         and, for each combination, check whether:
-            1) sum of its numbers equals to any value from the 'victory' pattern
+            1) sum of all numbers equals to any value from VICTORY_SUM
             2) there aren't more than 2 numbers divisible by 2
+            3) all numbers represent an arithmetic progression
+            with an equal difference
+            4) the combination shouldn't contain pairs of numbers
+            [3, 4] and [6, 7]
         """
-        VICTORY_SUM = (6, 12, 15, 18, 24)
         sorted_marks = sorted(self._player_marks[str(player)])
         combinations_ = combinations(sorted_marks, 3)
         for combi in combinations_:
@@ -135,7 +141,13 @@ class GameController:
                 # check for condition 2
                 even_num = [num for num in combi if num % 2 == 0]
                 if len(even_num) <= 2:
-                    return True
+                    # check for condition 3
+                    if combi[2] - combi[1] == combi[1] - combi[0]:
+                        # check for condition 4
+                        combi_list = list(combi)
+                        combi_list.pop()
+                        if combi_list != [3, 4] and combi_list != [6, 7]:
+                            return True
         return False
 
     def gameplay(self, grid_obj, player_1_obj, player_2_obj):

@@ -1,1 +1,1 @@
-This is my first game - Tic-Tac-Toe - that can be played in the terminal by two players.
+This is my very first game - Tic-Tac-Toe - which can be played in the terminal by two players (hot seat mode).
